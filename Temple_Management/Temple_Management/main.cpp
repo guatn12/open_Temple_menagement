@@ -1,17 +1,24 @@
-#include<Windows.h>
-#include "resource.h"
+/* 
+
+*/
+#include "common.h"
+#include "Menu.h"
+
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+BOOL CALLBACK Dlg_Proc(HWND, UINT, WPARAM, LPARAM);
 
 HINSTANCE g_hInst;
 LPCTSTR lpszClass = TEXT("사찰관리");
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
-	HWND hWnd;
-	MSG Message;
-	WNDCLASS WndClass;
+	//HWND hWnd;
+	//MSG Message;
+	//WNDCLASS WndClass;
 	g_hInst = hInstance;
 
+	DialogBox(g_hInst, MAKEINTRESOURCE(IDD_DIG), NULL, Dlg_Proc);
+	/*
 	WndClass.cbClsExtra = 0;
 	WndClass.cbWndExtra = 0;
 	WndClass.hbrBackground = (HBRUSH)GetStockObject(COLOR_WINDOW + 1);
@@ -33,36 +40,38 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 		DispatchMessage(&Message);
 	}
 	return (int)Message.wParam;
+	*/
+	return 0;
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
+/*LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 {
-	int ChoseExitOrSave;
-
+	
 	switch (iMessage){
 	case WM_CREATE:
+		DialogBox(g_hInst, MAKEINTRESOURCE(IDD_DIG), hWnd, Dlg_Proc);
 		return 0;
 	case WM_COMMAND:
-		switch (LOWORD(wParam)){
-		case ID_Believer:
-			break;
-		case ID_Event:
-			break;
-		case ID_Print:
-			break;
-		case ID_Exit:
-			ChoseExitOrSave = MessageBox(hWnd, TEXT("입력된 정보를 저장 후 종료 하시겠습니까?"), TEXT("종료"), MB_OKCANCEL);
-			if (ChoseExitOrSave == IDCANCEL)
-				break;
-			PostQuitMessage(0);
-			return 0;
-		case ID_INF:
-			break;
-		}
+		MenuF(hWnd, wParam);
 		return 0;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
 	}
 	return(DefWindowProc(hWnd, iMessage, wParam, lParam));
+}*/
+
+BOOL CALLBACK Dlg_Proc(HWND hDlg, UINT iMessage, WPARAM wParam, LPARAM lParam)
+{
+	switch (iMessage){
+	case WM_INITDIALOG:
+		return 1;
+	case WM_COMMAND:
+		break;
+	case WM_DESTROY:
+		EndDialog(hDlg, 0);
+		return 1;
+	}
+
+	return TRUE;
 }
